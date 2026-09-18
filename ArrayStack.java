@@ -51,7 +51,8 @@ public class ArrayStack<E> implements MyStack<E>{
     @Override 
     public void printStackInverso(){
         if(isEmpty()){
-            System.out.println("Historico Vazio!");
+            System.out.println("Pilha vazia!");
+            return;
         }
         System.out.println("Histórico de operações (MAIS ANTIGO AO MAIS RECENTE): ");
         for(int i = 0; i <= topoIndex; i++){

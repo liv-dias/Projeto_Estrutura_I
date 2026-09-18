@@ -96,34 +96,35 @@ public class Main {
                 case 6:
                     if(historicoOperacoes.isEmpty()){
                         System.out.println("Nenhuma operação foi realizada!");
-                    }
-                    System.out.println("\nÚltima operação realizada:  " + historicoOperacoes.topo()); 
+                    }else{
+                        System.out.println("\nÚltima operação realizada:  " + historicoOperacoes.topo());
+                    } 
                     break;
                     
-                case 7: 
-                    historicoOperacoes.printStackInverso();
+                case 7:
+                    if(historicoOperacoes.isEmpty()){
+                        System.out.println("Histórico Vazio!");
+                    }else{
+                        historicoOperacoes.printStackInverso();
+                    }
                     break;
                     
                 case 8:
                     if (historicoOperacoes.isEmpty()){
                         System.out.println("Não há nenhuma operação para desfazer!");
-                    }
-                    Operacao ultimaOp = historicoOperacoes.pop();
-                    Solicitacao ultimaSolicitacao = ultimaOp.getSolicitacao();
-                    if(ultimaSolicitacao.getStatus().equalsIgnoreCase("CADASTRADA")){
-                        boolean removido = filaAtendimento.remove(ultimaSolicitacao);
-
-                        if(removido){
-                            System.out.println("A solicitação de código " + ultimaSolicitacao.getCodigo() + " foi removida da fila");
-                        }
-                        System.out.println("O atendimento já não se encontrava mais na fila");
-                    }
-                    else if(ultimaOp.getTipo().equalsIgnoreCase("ATENDIDA")){
+                    }else{
+                        Operacao ultimaOp = historicoOperacoes.pop();
+                        Solicitacao ultimaSolicitacao = ultimaOp.getSolicitacao();
+                        if(ultimaSolicitacao.getStatus().equalsIgnoreCase("Aguardando")){
+                            Solicitacao ultima = filaAtendimento.dequeue();
+                            System.out.println("Solicitação de código " + ultima.getCodigo() + " foi removida!");
+                    
+                    }   else if(ultimaOp.getTipo().equalsIgnoreCase("ATENDIDA")){
                         ultimaSolicitacao.setStatus("Aguardando");
 
                         filaAtendimento.enqueue(ultimaSolicitacao);
                         System.out.println("A solicitação de código " + ultimaSolicitacao.getCodigo() + " voltou ao estado de 'Aguardando'");
-                    }
+                    }}
                     break;
                     
                 case 0: // Encerra o programa

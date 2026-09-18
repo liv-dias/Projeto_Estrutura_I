@@ -6,5 +6,4 @@ public interface MyQueue<E> {
     boolean isEmpty();      // Verifica se esta vazia
     int size();             // Retorna a quantidade
     void printQueue();     // Exibe os elementos
-    boolean remove();
 }

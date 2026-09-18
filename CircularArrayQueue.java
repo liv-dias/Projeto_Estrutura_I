@@ -72,23 +72,4 @@ public class CircularArrayQueue<E> implements MyQueue<E> {
         }
     }
 
-    @Override
-    public boolean remove(Solicitacao s){
-        if(isEmpty()){
-            return false;
-        }
-        int current = front;
-        for(int i = 0; i < count; i++){
-            if(elements[current].equals(s)){
-                s.dequeue();
-                count--;
-                for(int j = 0; j < count; j++){
-
-                }
-                return true;
-            }
-            current = (current + 1) % elements.length;
-        }
-        return false;
-    }
 }
