@@ -4,12 +4,12 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in); 
-        MyStack<Operacao> historicoOperacoes = new ArrayStack<>();
-        MyQueue<Solicitacao> filaAtendimento = new CircularArrayQueue<>();
+        MyStack<Operacao> historicoOperacoes = new ArrayStack<>();       // Pilha (LIFO) para registrar o histórico de operações
+        MyQueue<Solicitacao> filaAtendimento = new CircularArrayQueue<>(); // Fila (FIFO) para controlar a ordem de atendimento
         int contadorCodigo = 101; // Gerador de ID incremental
         int opcao = -1;
         
-        // Loop do Menu
+        // Loop do Menu: repete até o usuário escolher a opção 0 (encerrar)
         while (opcao != 0) {
             System.out.println("\n====================================");
             System.out.println("CENTRAL DE ATENDIMENTO");
@@ -25,6 +25,7 @@ public class Main {
             System.out.println(" 0 - Encerrar");
             System.out.println("\nDigite uma opcao a ser realizada: ");
 
+            // Valida se o que foi digitado é um número antes de ler a opção
             if (!scanner.hasNextInt()) {
                 System.out.println("Por favor, digite um numero valido.");
                 scanner.nextLine();
@@ -32,7 +33,7 @@ public class Main {
             }
             
             opcao = scanner.nextInt();
-            scanner.nextLine(); // Limpa o buffer do teclado
+            scanner.nextLine(); // Limpa o \n deixado no buffer pelo nextInt()
             
             switch (opcao) {
                 case 1: // Cria e enfileira uma nova solicitacao
@@ -47,7 +48,7 @@ public class Main {
                     
                     System.out.println("Digite a prioridade: ");
                     int prior = scanner.nextInt();
-                    scanner.nextLine(); 
+                    scanner.nextLine(); // Limpa o buffer novamente após ler um número
 
                     System.out.println("Digite o nome do responsável pelo solicitante: ");
                     String resp = scanner.nextLine();
@@ -58,6 +59,7 @@ public class Main {
                     String data = partes[0].replace("-", "/");
                     String hora = partes[1];
                     
+                    // Monta a solicitação, insere na fila e registra a operação no histórico
                     Solicitacao nova = new Solicitacao(contadorCodigo++, nome, prob, cat, prior, resp, data, hora);
                     filaAtendimento.enqueue(nova);
                     Operacao novaOperacao = new Operacao("CADASTRADA",nova);
@@ -65,7 +67,7 @@ public class Main {
                     System.out.println("Solicitacao cadastrada com sucesso!");
                     break;
                     
-                case 2: // Consulta o inicio da fila
+                case 2: // Consulta o inicio da fila (sem remover)
                     if (filaAtendimento.isEmpty()) {
                         System.out.println("Nao tem solicitacao na fila");
                     } else {
@@ -73,27 +75,27 @@ public class Main {
                     }
                     break;
                         
-                case 3: // Desenfileira e altera o status
+                case 3: // Desenfileira a próxima solicitação e atualiza o status
                     if (filaAtendimento.isEmpty()) {
                         System.out.println("Nao existe solicitacao na fila");
                     } else {
                         Solicitacao atendida = filaAtendimento.dequeue();
                         atendida.setStatus("EM_ATENDIMENTO"); 
                         Operacao atendimento = new Operacao("ATENDIDA", atendida);
-                        historicoOperacoes.push(atendimento);
+                        historicoOperacoes.push(atendimento); // Registra o atendimento no histórico
                         System.out.println("Atendimento iniciado para " + atendida);
                     }
                     break;
                     
-                case 4: // Exibe a fila
+                case 4: // Exibe todas as solicitacoes na fila
                     filaAtendimento.printQueue();
                     break;
                     
-                case 5: // Exibe a quantidade na fila
+                case 5: // Exibe a quantidade de solicitacoes na fila
                     System.out.println("\nQuantidade de solicitacoes totais: " + filaAtendimento.size());
                     break; 
                     
-                case 6:
+                case 6: // Consulta o topo da pilha (última operação), sem remover
                     if(historicoOperacoes.isEmpty()){
                         System.out.println("Nenhuma operação foi realizada!");
                     }else{
@@ -101,7 +103,7 @@ public class Main {
                     } 
                     break;
                     
-                case 7:
+                case 7: // Exibe todo o histórico de operações (do mais recente ao mais antigo)
                     if(historicoOperacoes.isEmpty()){
                         System.out.println("Histórico Vazio!");
                     }else{
@@ -109,17 +111,19 @@ public class Main {
                     }
                     break;
                     
-                case 8:
+                case 8: // Desfaz a última operação registrada na pilha
                     if (historicoOperacoes.isEmpty()){
                         System.out.println("Não há nenhuma operação para desfazer!");
                     }else{
                         Operacao ultimaOp = historicoOperacoes.pop();
                         Solicitacao ultimaSolicitacao = ultimaOp.getSolicitacao();
                         if(ultimaSolicitacao.getStatus().equalsIgnoreCase("Aguardando")){
+                            // Desfaz um cadastro: remove a solicitação da fila
                             Solicitacao ultima = filaAtendimento.dequeue();
                             System.out.println("Solicitação de código " + ultima.getCodigo() + " foi removida!");
                     
                     }   else if(ultimaOp.getTipo().equalsIgnoreCase("ATENDIDA")){
+                        // Desfaz um atendimento: volta o status e reinsere na fila
                         ultimaSolicitacao.setStatus("Aguardando");
 
                         filaAtendimento.enqueue(ultimaSolicitacao);
@@ -135,6 +139,6 @@ public class Main {
                     System.out.println("\nOpcao invalida, escolha um numero que esta no menu");
             }
         }
-        scanner.close();
+        scanner.close(); // Fecha o Scanner ao final da execução
     }
 }
