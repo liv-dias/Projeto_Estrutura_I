@@ -2,10 +2,10 @@ public class DNode<E>{
     private E element;
     private DNode<E> next;
     private DNode<E> prev;
-    public DNode<E> (E element, DNode next, DNode prev){
-        this.element = element;
-        this.next = next;
-        this.prev = prev;
+    public DNode (E e, DNode<E> n, DNode<E> p){
+        this.element = e;
+        this.next = n;
+        this.prev = p;
     }
 
     public E getElement(){
