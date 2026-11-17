@@ -1,4 +1,4 @@
-public class LinkedStack<E> implements MyStack<E> {
+public class LinkedStack<E> {
 
     private SLinkedList<E> elements;
 
@@ -6,12 +6,10 @@ public class LinkedStack<E> implements MyStack<E> {
         elements = new SLinkedList<>();
     }
 
-    @Override
     public void push(E element) {
         elements.addFirst(element);
     }
 
-    @Override
     public E pop() {
         if ( isEmpty() ) {
             throw new IllegalStateException (" Pilha vazia ");
@@ -19,7 +17,6 @@ public class LinkedStack<E> implements MyStack<E> {
         return elements.removeFirst();
     }
 
-    @Override
     public E top() {
         if ( isEmpty() ) {
             throw new IllegalStateException (" Pilha vazia ");
@@ -27,17 +24,14 @@ public class LinkedStack<E> implements MyStack<E> {
         return elements.first();
     }
 
-    @Override
     public boolean isEmpty() {
         return elements.isEmpty();
     }
 
-    @Override
     public int size() {
         return elements.size();
     }
-    
-    @Override
+
     public void printStackInverso() {
         if (isEmpty()) {
             System.out.println("Pilha vazia!");
